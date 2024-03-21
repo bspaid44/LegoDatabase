@@ -9,21 +9,43 @@ namespace LegoDatabase.Models
 {
     public class Part
     {
-        public int Id { get; set; }
-        public int PartNumId { get; set; }
+        public int partId { get; set; }
+        public string PartNumId { get; set; }
         public string Name { get; set; }
-        public int PartCategoryId { get; set; }
-        public PartCategory PartCategory { get; set; }
+        public string PartCatId { get; set; }
 
         public Part()
         {
         }
 
-        public Part(int partNumId, string name, int partCategoryId)
+        public Part(string partNumId, string name, string partCatId)
         {
             PartNumId = partNumId;
             Name = name;
-            PartCategoryId = partCategoryId;
+            PartCatId = partCatId;
+        }
+
+        public static List<Part> ProcessFile(string path)
+        {
+            return
+             File.ReadAllLines(path)
+                .Skip(1)
+                .Where(line => line.Length > 1)
+                .Select(ParseToPart)
+                .ToList();
+
+        }
+
+        private static Part ParseToPart(string line)
+        {
+            var columns = line.Split(',');
+
+            return new Part
+            {
+                PartNumId = columns[0],
+                Name = columns[1],
+                PartCatId = columns[2]
+            };
         }
     }
 }

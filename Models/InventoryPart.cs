@@ -8,27 +8,49 @@ namespace LegoDatabase.Models
 {
     public class InventoryPart
     {
-        public int Id { get; set; }
+        public int inventoryPartId { get; set; }
         public int InventoryId { get; set; }
-        public Inventory Inventory { get; set; }
-        public int PartNumId { get; set; }
-        public Part Part { get; set; }
-        public int ColorId { get; set; }
-        public Color Color { get; set; }
+        public string PartNumId { get; set; }
+        public string ColorNameId { get; set; }
         public int Quantity { get; set; }
-        public char IsSpare { get; set; }
+        public string IsSpare { get; set; }
 
         public InventoryPart()
         {
         }
 
-        public InventoryPart(int inventoryId, int partNumId, int colorId, int quantity, char isSpare)
+        public InventoryPart(int inventoryId, string partNumId, string colorId, int quantity, string isSpare)
         {
             InventoryId = inventoryId;
             PartNumId = partNumId;
-            ColorId = colorId;
+            ColorNameId = colorId;
             Quantity = quantity;
             IsSpare = isSpare;
+        }
+
+        public static List<InventoryPart> ProcessFile(string path)
+        {
+            return
+             File.ReadAllLines(path)
+                .Skip(1)
+                .Where(line => line.Length > 1)
+                .Select(ParseToInventoryPart)
+                .ToList();
+
+        }
+
+        private static InventoryPart ParseToInventoryPart(string line)
+        {
+            var columns = line.Split(',');
+
+            return new InventoryPart
+            {
+                InventoryId = int.Parse(columns[0]),
+                PartNumId = columns[1],
+                ColorNameId = columns[2],
+                Quantity = int.Parse(columns[3]),
+                IsSpare = columns[4]
+            };
         }
     }
 }

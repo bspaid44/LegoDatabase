@@ -19,6 +19,7 @@ namespace LegoDatabase.Data
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=LegoDB;Trusted_Connection=True;");
         }
     }
