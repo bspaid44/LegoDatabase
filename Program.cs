@@ -1,69 +1,41 @@
-﻿using LegoDatabase.Data;
+﻿using LegoDatabase;
+using LegoDatabase.Data;
 using LegoDatabase.Models;
 using Microsoft.EntityFrameworkCore;
 
 var context = new LegoDBContext();
+string input;
 context.Database.EnsureCreated();
+Utilities.SeedDatabase();
 
-if (context.Inventories.Count() == 0)
+do
 {
-    var colors = Color.ProcessFile("Data/colors.csv");
-    var inventories = Inventory.ProcessFile("Data/inventories.csv");
-    var inventoryParts = InventoryPart.ProcessFile("Data/inventory_parts.csv");
-    var parts = Part.ProcessFile("Data/parts.csv");
-    var partCategories = PartCategory.ProcessFile("Data/part_categories.csv");
-    var sets = Set.ProcessFile("Data/sets.csv");
-    var themes = Theme.ProcessFile("Data/themes.csv");
+    Console.WriteLine("\n" + "Lego Database Project" + "\n");
+    Console.WriteLine("Please Select a Query");
+    Console.WriteLine("*******************************" + "\n");
+    Console.WriteLine("1. Part Count Grouped By Color");
+    Console.WriteLine("2. Part Count Grouped By Category");
+    Console.WriteLine("3. Color Name and RGB Value");
+    Console.WriteLine("0. Exit" + "\n");
 
-    foreach (var color in colors)
+    input = Console.ReadLine();
+
+    switch (input)
     {
-        context.Colors.Add(color);
-        Console.WriteLine("Color row added");
+        case "1":
+            Utilities.PartCountByColor();
+            break;
+        case "2":
+            Utilities.PartCountByCategory();
+            break;
+        case "3":
+            Utilities.ColorNameRGB();
+            break;
+        case "0":
+            Console.WriteLine("Goodbye!");
+            break;
+        default:
+            break;
     }
-
-    foreach (var inventory in inventories)
-    {
-        context.Inventories.Add(inventory);
-        Console.WriteLine("Inventory row added");
-    }
-
-    foreach (var inventory in inventoryParts)
-    {
-        context.InventoryParts.Add(inventory);
-        Console.WriteLine("InventoryPart row added");
-    }
-
-    foreach (var part in parts)
-    {
-        context.Parts.Add(part);
-        Console.WriteLine("Part row added");
-    }
-
-    foreach (var part in partCategories)
-    {
-        context.PartCategories.Add(part);
-        Console.WriteLine("PartCategory row added");
-    }
-
-    foreach (var part in parts)
-    {
-        context.Parts.Add(part);
-        Console.WriteLine("Part row added");
-    }
-
-    foreach (var set in sets)
-    {
-        context.Sets.Add(set);
-        Console.WriteLine("Set row added");
-    }
-
-    foreach (var theme in themes)
-    {
-        context.Themes.Add(theme);
-        Console.WriteLine("Theme row added");
-    }
-
-    context.SaveChanges();
-    Console.WriteLine("Data has been seeded");
-}
+} while (input != "0");
 
