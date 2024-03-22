@@ -124,5 +124,30 @@ namespace LegoDatabase
                 Console.WriteLine($"{color.Name} - {color.RGB}");
             }
         }
+
+        public static void PartByColor(string color)
+        {
+            var context = new LegoDBContext();
+            var ip = context.InventoryParts;
+            var parts = context.Parts;
+            var colors = context.Colors;
+
+            var partByColor = ip
+                .Join(parts, ip => ip.PartNumId, p => p.PartNumId, (ip, p) => new { ip, p })
+                .Join(colors, x => x.ip.ColorNameId, c => c.ColorNameId, (x, c) => new { x, c })
+                .Where(x => x.c.Name == color)
+                .Select(x => x.x.p.Name);
+
+            if (partByColor.Count() == 0)
+            {
+                Console.WriteLine("No parts found for that color");
+                return;
+            }
+
+            foreach (var item in partByColor)
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 }
