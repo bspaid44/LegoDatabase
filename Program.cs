@@ -34,32 +34,11 @@ do
             Utilities.ColorNameRGB();
             break;
         case "4":
-            Console.WriteLine("Enter a color name: ");
-            string color = Console.ReadLine();
-            var colors = context.Colors;
-            if (!colors.Any(c => c.Name == color) || color == "")
-            {
-                Console.WriteLine("Color not found");
-                Utilities.ColorNameRGB();
-                Console.WriteLine("^^ Try one of these ^^");
-                break;
-            }
+            string color = Utilities.ColorNameValidation();
             Utilities.PartByColor(color);
             break;
         case "5":
-            Console.WriteLine("Enter a set name: ");
-            string name = Console.ReadLine();
-            var sets = context.Sets;
-            if (!sets.Any(s => s.Name.Contains(name)) || name == "")
-            {
-                Console.WriteLine("No sets found with that name");
-                foreach (var item in sets)
-                {
-                    Console.WriteLine(item.Name);
-                }
-                Console.WriteLine("\n" + "^^ Try one of these ^^" + "\n");
-                break;
-            }
+            string name = Utilities.SetNameValidation();
             Utilities.SearchSetsByName(name);
             break;
         case "0":

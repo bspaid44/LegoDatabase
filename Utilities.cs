@@ -1,5 +1,6 @@
 ﻿using LegoDatabase.Data;
 using LegoDatabase.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -170,6 +171,39 @@ namespace LegoDatabase
                     $"And is part of the theme: {item.ThemeName}\n"
                     );
             }
+        }
+
+        public static string SetNameValidation()
+        {
+            var context = new LegoDBContext();
+            Console.WriteLine("Enter a set name: ");
+            string name = Console.ReadLine();
+            var sets = context.Sets;
+            if (!sets.Any(s => s.Name.Contains(name)) || name == "")
+            {
+                Console.WriteLine("No sets found with that name");
+                foreach (var item in sets)
+                {
+                    Console.WriteLine(item.Name);
+                }
+                Console.WriteLine("\n" + "^^ Try one of these ^^" + "\n");
+            }
+            return name;
+        }
+
+        public static string ColorNameValidation()
+        {
+            var context = new LegoDBContext();
+            Console.WriteLine("Enter a color name: ");
+            string color = Console.ReadLine();
+            var colors = context.Colors;
+            if (!colors.Any(c => c.Name == color) || color == "")
+            {
+                Console.WriteLine("Color not found");
+                ColorNameRGB();
+                Console.WriteLine("^^ Try one of these ^^");
+            }
+            return color;
         }
     }
 }
