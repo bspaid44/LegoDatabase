@@ -149,5 +149,27 @@ namespace LegoDatabase
                 Console.WriteLine(item);
             }
         }
+
+        public static void SearchSetsByName(string name)
+        {
+            var context = new LegoDBContext();
+            var sets = context.Sets;
+            var themes = context.Themes;
+
+            var setsByName = sets
+                .Join(themes, s => s.ThemeNameId, t => t.ThemeNameId, (s, t) => new { s, t })
+                .Where(x => x.s.Name.Contains(name))
+                .Select(x => new { x.s.Name, x.s.NumParts, x.s.Year, ThemeName = x.t.Name });
+
+            foreach (var item in setsByName)
+            {
+                Console.WriteLine(
+                    $"\nThe set: {item.Name} \n" +
+                    $"Has {item.NumParts} parts\n" +
+                    $"Was made in the year {item.Year}\n" +
+                    $"And is part of the theme: {item.ThemeName}\n"
+                    );
+            }
+        }
     }
 }

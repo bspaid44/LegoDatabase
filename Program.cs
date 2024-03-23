@@ -16,7 +16,8 @@ do
     Console.WriteLine("1. Part Count Grouped By Color");
     Console.WriteLine("2. Part Count Grouped By Category");
     Console.WriteLine("3. Color Name and RGB Value");
-    Console.WriteLine("4. Parts by Color Name");
+    Console.WriteLine("4. Search for Parts by Color Name");
+    Console.WriteLine("5. Search for Sets by Name");
     Console.WriteLine("0. Exit" + "\n");
 
     input = Console.ReadLine();
@@ -44,6 +45,22 @@ do
                 break;
             }
             Utilities.PartByColor(color);
+            break;
+        case "5":
+            Console.WriteLine("Enter a set name: ");
+            string name = Console.ReadLine();
+            var sets = context.Sets;
+            if (!sets.Any(s => s.Name.Contains(name)) || name == "")
+            {
+                Console.WriteLine("No sets found with that name");
+                foreach (var item in sets)
+                {
+                    Console.WriteLine(item.Name);
+                }
+                Console.WriteLine("\n" + "^^ Try one of these ^^" + "\n");
+                break;
+            }
+            Utilities.SearchSetsByName(name);
             break;
         case "0":
             Console.WriteLine("Goodbye!");
